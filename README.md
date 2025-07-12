@@ -44,7 +44,7 @@ cd filogenia_dashboard
 python -m venv env
 
 # En Windows
-.\env\Scripts\Activate.ps1
+./env/Scripts/Activate.ps1
 
 # En Linux/Mac
 source env/bin/activate
