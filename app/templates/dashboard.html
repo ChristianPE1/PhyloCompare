@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Filogenético</title>
+    <script>
+        async function subirArchivos(event) {
+            event.preventDefault();
+            const form = document.getElementById("upload-form");
+            const data = new FormData(form);
+
+            const res = await fetch("/upload", {
+                method: "POST",
+                body: data
+            });
+
+            const json = await res.json();
+
+            if (json.error) {
+                document.getElementById("mensaje").innerText = json.error;
+                return;
+            }
+
+            const lista = document.getElementById("lista-secuencias");
+            lista.innerHTML = "";
+            json.sequences.forEach(name => {
+                lista.innerHTML += `<label><input type="checkbox" name="selected" value="${name}"> ${name}</label><br>`;
+            });
+            document.getElementById("seleccion-form").style.display = "block";
+        }
+
+        async function alinearSecuencias(event) {
+            event.preventDefault();
+            const checkboxes = document.querySelectorAll('input[name="selected"]:checked');
+            const seleccionadas = Array.from(checkboxes).map(cb => cb.value);
+
+            const res = await fetch("/alinear", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ selected: seleccionadas })
+            });
+
+            const json = await res.json();
+            const salida = document.getElementById("resultado");
+
+            if (json.error) {
+                salida.innerHTML = `<p style="color:red">${json.error}</p>`;
+                return;
+            }
+
+            salida.innerHTML = "<h3>Resultado del alineamiento:</h3>";
+            for (const [nombre, secuencia] of Object.entries(json.aligned)) {
+                salida.innerHTML += `<p><strong>${nombre}</strong><br><code>${secuencia}</code></p>`;
+            }
+
+            document.getElementById("arbol-section").style.display = "block";
+        }
+
+        async function generarArbol(event) {
+            event.preventDefault();
+            const algoritmo = document.getElementById("algoritmo").value;
+
+            const res = await fetch(`/arbol/${algoritmo}`);
+            const json = await res.json();
+
+            const salida = document.getElementById("arbol-generado");
+            if (json.error) {
+                salida.innerText = "Error: " + json.error;
+            } else {
+                document.getElementById("img-arbol").src = "/static/arbol.png?" + new Date().getTime();
+
+                salida.innerText = json.arbol;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Dashboard Filogenético</h1>
+
+    <!-- Subir archivos -->
+    <h2>1. Subir archivos FASTA</h2>
+    <form id="upload-form" onsubmit="subirArchivos(event)" enctype="multipart/form-data">
+        <input type="file" name="files" accept=".fasta" multiple required>
+        <button type="submit">Subir</button>
+    </form>
+    <p id="mensaje" style="color:red;"></p>
+
+    <!-- Seleccionar secuencias -->
+    <div id="seleccion-form" style="display:none;">
+        <h2>2. Selecciona secuencias para alinear</h2>
+        <form onsubmit="alinearSecuencias(event)">
+            <div id="lista-secuencias"></div>
+            <button type="submit">Alinear seleccionadas</button>
+        </form>
+    </div>
+
+    <!-- Resultado del alineamiento -->
+    <div id="resultado" style="margin-top:20px;"></div>
+
+    <!-- Generar árbol filogenético -->
+    <div id="arbol-section" style="margin-top:30px; display:none;">
+        <h2>3. Generar Árbol Filogenético</h2>
+
+        <form id="arbol-form" onsubmit="generarArbol(event)">
+            <label for="algoritmo">Elige el algoritmo:</label><br>
+            <select id="algoritmo">
+                <option value="upgma">UPGMA</option>
+                <option value="nj">Neighbor Joining</option>
+            </select>
+            <br><br>
+            <button type="submit">Generar Árbol</button>
+        </form>
+
+        <h3>Resultado:</h3>
+        <pre id="arbol-generado" style="background:#f9f9f9; border:1px solid #ccc; padding:10px;"></pre>
+        <img id="img-arbol" src="/static/arbol.png" alt="Árbol filogenético" style="max-width:100%; border:1px solid #ccc; padding:10px;">
+    </div>
+</body>
+</html>

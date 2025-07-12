@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  }
+  
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200;
+  }
+}
+
+/* Estilos para visualización de árboles */
+.phylo-tree {
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+}
+
+.phylo-tree .node {
+  cursor: pointer;
+}
+
+.phylo-tree .node:hover {
+  stroke: #2563eb;
+  stroke-width: 2px;
+}
+
+.phylo-tree .link {
+  fill: none;
+  stroke: #64748b;
+  stroke-width: 1.5px;
+}
+
+.phylo-tree .link:hover {
+  stroke: #2563eb;
+  stroke-width: 2px;
+}
+
+.phylo-tree .label {
+  font-size: 11px;
+  fill: #1e293b;
+}
+
+.phylo-tree .bootstrap {
+  font-size: 9px;
+  fill: #64748b;
+}
+
+/* Loader spinner */
+.loader {
+  border: 3px solid #f3f4f6;
+  border-top: 3px solid #2563eb;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Estilos para drag and drop */
+.drag-over {
+  @apply border-blue-500 bg-blue-200;
+}
+
+  /* bg-blue-25 no existe en Tailwind por defecto, usar bg-blue-200 como alternativa */
+.drag-active {
+  @apply border-2 border-dashed border-blue-400 bg-blue-200;
+}/* Scrollbar personalizado */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
