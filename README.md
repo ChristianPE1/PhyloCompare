@@ -1,4 +1,4 @@
-# Filogenia Dashboard
+# PhyloCompare
 
 Dashboard web interactivo para análisis y comparación de árboles filogenéticos generados mediante diferentes métodos de reconstrucción (Neighbor-Joining y Máxima Verosimilitud).
 
